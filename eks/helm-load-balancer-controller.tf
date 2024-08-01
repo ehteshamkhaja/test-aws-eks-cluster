@@ -13,7 +13,40 @@ module "aws_load_balancer_controller_irsa_role" {
     }
   }
 }
+resource "aws_iam_role_policy" "alb-additional-policy" {
+  name = "alb-additional-policy"
+  role = module.aws_load_balancer_controller_irsa_role.iam_role.id
 
+  policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+            "Effect": "Allow",
+            "Action": [
+                "elasticloadbalancing:AddTags"
+            ],
+            "Resource": [
+                "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*",
+                "arn:aws:elasticloadbalancing:*:*:loadbalancer/net/*/*",
+                "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/*/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "elasticloadbalancing:CreateAction": [
+                        "CreateTargetGroup",
+                        "CreateLoadBalancer"
+                    ]
+                },
+                "Null": {
+                    "aws:RequestTag/elbv2.k8s.aws/cluster": "false"
+                }
+            }
+        }
+  ]
+}
+EOF
+}
 resource "helm_release" "aws_load_balancer_controller" {
   name = "aws-load-balancer-controller"
 
