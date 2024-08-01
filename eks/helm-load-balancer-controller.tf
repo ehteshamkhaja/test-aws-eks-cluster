@@ -15,7 +15,7 @@ module "aws_load_balancer_controller_irsa_role" {
 }
 resource "aws_iam_role_policy" "alb-additional-policy" {
   name = "alb-additional-policy"
-  role = module.aws_load_balancer_controller_irsa_role.iam_role.id
+  role = module.aws_load_balancer_controller_irsa_role.id
 
   policy = <<-EOF
 {
