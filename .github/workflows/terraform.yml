@@ -47,6 +47,9 @@ name: 'Terraform'
 on:
   push:
     branches: [ "master" ]
+    paths-ignore:
+      - 'manifests/**'
+      - 'README.md'
   pull_request:
 
 permissions:
