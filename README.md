@@ -27,7 +27,7 @@ In the EKS folder, i have added the terraform code for the eks cluster creation 
 Once the terraform.yml file from repository .github/workflows is triggered, it will download the modules required and provision the EKS cluster and also the ALB ingress controller, with the required roles and policies. 
 
 
-Note:  I was unable to create the ALB while provisioning the ALB ingress controller, while debugging, noticed that with the module used , i could see the below error. 
+Note:  I was unable to create the ALB while provisioning the ALB ingress controller, while debugging, noticed that with the module used, due to lack of addition of tags permission , i could see the below error. 
 
 
 
