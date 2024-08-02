@@ -11,14 +11,6 @@ Pre-requisites:
 
 3. In my pipeline, i have first added the oidc provider authentication check so that we can proceed with our pipeline build. 
 4. Created the S3 bucket as the backend to store the terraform state file
-5. Created the ECR repository to store the docker images, to be used later for application deployments in EKS. 
-6. Setup the sonar project in the sonarcloud.io for code coverage. 
-   Also configured custom Quality gate to meet the requested code coverage of 85%. Please find the screenshot below. 
-
-
-![image](https://github.com/user-attachments/assets/13a29df6-5e94-4c5e-ac6f-2cd9cdd401a1)
-
-
 
 Implementation:
 
