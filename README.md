@@ -20,10 +20,10 @@ Once the terraform.yml file from repository .github/workflows is triggered, it w
 
 Note:  I was unable to create the ALB while provisioning the ALB ingress controller, while debugging, noticed that with the module used , i could see the below error. 
 
-==
+
 
 {"namespace":"default","error":"AccessDenied: User: arn:aws:sts::210613553230:assumed-role/aws-load-balancer-controller/1722548827773681707 is not authorized to perform: elasticloadbalancing:AddTags on resource: arn:aws:elasticloadbalancing:us-east-2:210613553230:targetgroup/k8s-default-echoserv-f19a4ba037/* because no identity-based policy allows the elasticloadbalancing:AddTags action\n\tstatus code: 403, request id: 4049cf19-5f0a-425f-af01-0944bef92e18"}
-===
+
 
 As per the error , it was not having the elasticloadbalancing:AddTags permissions attached to policy. 
 
