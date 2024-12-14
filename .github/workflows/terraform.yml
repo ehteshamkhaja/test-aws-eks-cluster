@@ -71,9 +71,10 @@ jobs:
     - name: Terraform ${{ inputs.action }}
       run: |
        if [[ $inputs.action == "plan" ]]; then 
-       cd eks && terraform ${{ inputs.action }} -input=false
+
+         cd eks && ls && terraform ${{ inputs.action }} 
        elif [[ $inputs.action == "apply" || $inputs.action == "destroy"  ]]; then 
-         cd eks && terraform ${{ inputs.action }} -auto-approve -input=false
+         cd eks && ls && terraform ${{ inputs.action }} -auto-approve 
        fi
 
       # On push to "master", build or change infrastructure according to Terraform configuration files
