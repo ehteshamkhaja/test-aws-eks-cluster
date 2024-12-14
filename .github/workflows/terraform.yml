@@ -66,11 +66,18 @@ jobs:
     - name: Terraform Format
       run: cd eks && terraform fmt -check
 
+
     # Generates an execution plan for Terraform
     - name: Terraform ${{ inputs.action }}
-      run: cd eks && terraform ${{ inputs.action }} -input=false
+      run: |
+       if [[ $inputs.action == "plan" ]]; then 
+       cd eks && terraform ${{ inputs.action }} -input=false
+       else
+         if [[ $inputs.action == "apply" || $inputs.action == "destroy"  ]]; then 
+         cd eks && terraform ${{ inputs.action }} -auto-approve -input=false
+       fi
 
       # On push to "master", build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-    - name: Terraform ${{ inputs.action }}
-      run: cd eks && terraform ${{ inputs.action }} -auto-approve -input=false
+   # - name: Terraform ${{ inputs.action }}
+   #   run: cd eks && terraform ${{ inputs.action }} -auto-approve -input=false
