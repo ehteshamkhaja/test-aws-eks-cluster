@@ -33,7 +33,7 @@ jobs:
         run: |
           aws sts get-caller-identity
 
-  terraform:
+  terraform-initialization:
     
     needs: CheckAuthenticationusingRole
 
@@ -66,18 +66,46 @@ jobs:
     - name: Terraform Format
       run: cd eks && terraform fmt -check
 
-
+  Terraform-plan:
+     needs: terraform-initialization
     # Generates an execution plan for Terraform
-    - name: Terraform ${{ inputs.action }}
-      run: |
-       if [[ $inputs.action == "plan" ]]; then 
+     if: $inputs.action == "plan" 
+     runs-on: ubuntu-latest
+     steps:
+      - name: Configure AWS Credentials 
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+          audience: sts.amazonaws.com
+          aws-region: us-west-1
+          role-to-assume: arn:aws:iam::210613553230:role/github-id-role
 
-         cd eks && ls && terraform ${{ inputs.action }} 
-       elif [[ $inputs.action == "apply" || $inputs.action == "destroy"  ]]; then 
-         cd eks && ls && terraform ${{ inputs.action }} -auto-approve 
-       fi
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: cd eks && terraform init
 
-      # On push to "master", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-   # - name: Terraform ${{ inputs.action }}
-   #   run: cd eks && terraform ${{ inputs.action }} -auto-approve -input=false
+      - name: Terraform ${{ inputs.action }}
+        run: |
+           cd eks && terraform ${{ inputs.action }} 
+        shell: bash
+  
+  Terraform-apply:
+    needs: Terraform-plan
+    if: $inputs.action == "apply" 
+    runs-on: ubuntu-latest
+    steps:
+     - name: Configure AWS Credentials 
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+          audience: sts.amazonaws.com
+          aws-region: us-west-1
+          role-to-assume: arn:aws:iam::210613553230:role/github-id-role
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: cd eks && terraform init
+
+      - name: Terraform ${{ inputs.action }}
+        run: |
+          cd eks  && terraform ${{ inputs.action }}
+        shell: bash
+          
