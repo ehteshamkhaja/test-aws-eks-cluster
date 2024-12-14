@@ -72,8 +72,7 @@ jobs:
       run: |
        if [[ $inputs.action == "plan" ]]; then 
        cd eks && terraform ${{ inputs.action }} -input=false
-       else
-         if [[ $inputs.action == "apply" || $inputs.action == "destroy"  ]]; then 
+       elif [[ $inputs.action == "apply" || $inputs.action == "destroy"  ]]; then 
          cd eks && terraform ${{ inputs.action }} -auto-approve -input=false
        fi
 
