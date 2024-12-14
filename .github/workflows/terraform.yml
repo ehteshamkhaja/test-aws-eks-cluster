@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: 'Enter the action you need to do using Terrform'
+        description: 'Enter the action you need to do using Terraform'
         type: choice
         options:
           - plan
