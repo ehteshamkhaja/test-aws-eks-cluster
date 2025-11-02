@@ -72,28 +72,28 @@ jobs:
      if: $inputs.action == "plan" 
      runs-on: ubuntu-latest
      steps:
-      - name: Configure AWS Credentials 
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
+     - name: Configure AWS Credentials 
+       uses: aws-actions/configure-aws-credentials@v4
+       with:
           audience: sts.amazonaws.com
           aws-region: us-west-1
           role-to-assume: arn:aws:iam::210613553230:role/github-id-role
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
-        run: cd eks && terraform init
+     - name: Terraform Init
+       run: cd eks && terraform init
 
-      - name: Terraform ${{ inputs.action }}
-        run: |
+     - name: Terraform ${{ inputs.action }}
+       run: |
            cd eks && terraform ${{ inputs.action }} 
-        shell: bash
+       shell: bash
   
   Terraform-apply:
     needs: Terraform-plan
     if: $inputs.action == "apply" 
     runs-on: ubuntu-latest
     steps:
-     - name: Configure AWS Credentials 
+    - name: Configure AWS Credentials 
       uses: aws-actions/configure-aws-credentials@v4
       with:
           audience: sts.amazonaws.com
